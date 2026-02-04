@@ -25,6 +25,9 @@ public class QuantityMeasurementApp {
             if (obj == null) return false;
             if (obj == this) return false;
             if (this.getClass() != obj.getClass()) return false;
+
+            System.out.println("in equals method");
+
             return Double.compare(value1, ((Feet) obj).getValue1()) == 0 && Double.compare(value2, ((Feet) obj).getValue2()) == 0;
         }
 
