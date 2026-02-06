@@ -72,8 +72,10 @@ public class QuantityMeasurementAppTest {
         Length l2 = new Length(1, Length.LengthUnit.FEET);
         Length l3 = new Length(1, Length.LengthUnit.FEET);
 
-        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l1, l2));
-        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l2, l3));
-        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l1, l3));
+        assertAll(
+                () -> assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l1, l2)),
+                () -> assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l2, l3)),
+                () -> assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(l1, l3))
+        );
     }
 }
