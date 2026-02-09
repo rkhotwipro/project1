@@ -7,17 +7,21 @@ public class Length {
 
     public Length(double value, LengthUnit unit) {
 
-        if (unit == null) {
+        if (unit == null){
             throw new IllegalArgumentException("Unit must not be a null");
+        }
+
+        if(Double.isNaN(value) || Double.isInfinite(value)){
+            throw new IllegalArgumentException("Please enter the floating point value");
         }
 
         this.value = value;
         this.unit = unit;
     }
 
-    public enum LengthUnit {
-        FEET(12.0),
-        INCHES(1.0),
+    public enum LengthUnit{
+        FEET( 12.0),
+        INCHES( 1.0),
         YARDS(36.0),
         CENTIMETERS(0.393701);
 
@@ -33,39 +37,53 @@ public class Length {
     }
 
     // Base unit is inches
-    private double convertToBaseUnit() {
-        return this.value * unit.getConversionFactor();
+    private double convertToBaseUnit(){
+        return  this.value * unit.getConversionFactor();
     }
 
-    public boolean compare(Length thatLength) {
-        if (thatLength == null) return false;
+    public boolean compare(Length thatLength){
+        if(thatLength == null) return false;
 
-        return Double.compare(Math.round(convertToBaseUnit()), Math.round(thatLength.convertToBaseUnit())) == 0;
+        return Double.compare(Math.round(convertToBaseUnit()) , Math.round(thatLength.convertToBaseUnit())) == 0;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (this == obj) return true;
-        if (this.getClass() != obj.getClass()) return false;
+    public boolean equals(Object obj){
+        if(obj == null) return  false;
+        if(this == obj) return true;
+        if(this.getClass() != obj.getClass()) return false;
         return this.compare((Length) obj);
     }
 
-    public static void main(String[] args) {
-        Length l1 = new Length(1.0, LengthUnit.FEET);
-        Length l2 = new Length(12.0, LengthUnit.INCHES);
+    public Length convertTo(LengthUnit targetUnit){
 
-        System.out.println("Are length equals? " + l1.equals(l2));
+        if(targetUnit == null){
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+        Length length1 = new Length(this.value, this.unit);
 
-        Length l3 = new Length(1.0, LengthUnit.YARDS);
-        Length l4 = new Length(36.0, LengthUnit.INCHES);
+        double baseUnit = length1.convertToBaseUnit();
+        return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
+    }
 
-        System.out.println("Are length equals? " + l3.equals(l4));
+    public static void main(String[] args){
+        Length length1 = new Length(1, LengthUnit.FEET);
 
-        Length l5 = new Length(100.0, LengthUnit.CENTIMETERS);
-        Length l6 = new Length(39.3701, LengthUnit.INCHES);
+        System.out.print(length1);
 
-        System.out.println("Are length equals? " + l5.equals(l6));
+        System.out.print(" is ");
+        Length length2 = length1.convertTo(LengthUnit.INCHES);
+        System.out.println(length2);
+    }
 
+    @Override
+    public String toString() {
+        return "Length{" +
+                value + " "+ unit +
+                '}';
+    }
+
+    public double getValue() {
+        return value;
     }
 }
