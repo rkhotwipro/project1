@@ -66,6 +66,15 @@ public class Length {
         return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
     }
 
+    public Length add(Length thatLength){
+        if(thatLength == null){
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+        double baseInch  = this.convertToBaseUnit() + thatLength.convertToBaseUnit();
+        Length l1 = new Length(baseInch, LengthUnit.INCHES);
+        return l1.convertTo(this.unit);
+    }
+
     public static void main(String[] args){
         Length length1 = new Length(1, LengthUnit.FEET);
 
