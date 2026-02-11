@@ -75,6 +75,31 @@ public class Length {
         return l1.convertTo(this.unit);
     }
 
+    public Length add(Length length, LengthUnit targetUnit){
+        if(targetUnit == null){
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+
+        double baseInch  = this.convertToBaseUnit() + length.convertToBaseUnit();
+        Length l1 = new Length(baseInch, LengthUnit.INCHES);
+
+        return l1.convertTo(targetUnit);
+
+    }
+
+    private Length addAndConvert(Length length, LengthUnit targetUnit){
+        if(targetUnit == null){
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+
+        double baseUnit  = this.convertToBaseUnit() + length.convertToBaseUnit();
+        return  convertFromBaseToTargetUnit(baseUnit, targetUnit);
+    }
+
+    private Length convertFromBaseToTargetUnit(double baseUnit, LengthUnit targetUnit){
+        return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
+    }
+
     public static void main(String[] args){
         Length length1 = new Length(1, LengthUnit.FEET);
 
