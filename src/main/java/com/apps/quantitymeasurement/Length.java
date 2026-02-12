@@ -60,10 +60,11 @@ public class Length {
         if(targetUnit == null){
             throw new IllegalArgumentException("Target unit must not be null");
         }
-        Length length1 = new Length(this.value, this.unit);
+        //Length length1 = new Length(this.value, this.unit);
 
-        double baseUnit = length1.convertToBaseUnit();
-        return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
+        double baseUnit = this.convertToBaseUnit();
+        //return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
+        return convertFromBaseToTargetUnit(baseUnit, targetUnit);
     }
 
     public Length add(Length thatLength){

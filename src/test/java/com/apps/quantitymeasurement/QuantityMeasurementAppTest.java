@@ -82,7 +82,8 @@ public class QuantityMeasurementAppTest {
     public void testConversion_PrecisonToTolerance(){
         Length length = new Length(300.0, Length.LengthUnit.CENTIMETERS);
         Length l1 = QuantityMeasurementApp.demonstrateLengthConversion(length, Length.LengthUnit.YARDS);
-         Assertions.assertEquals(3.28084, l1.getValue(), 3.28085);
+         //Assertions.assertEquals(3.28084, l1.getValue(), 0.01);
+        Assertions.assertEquals(3.28084, l1.getValue(), 0.001);
     }
 
     //UC6
@@ -128,18 +129,18 @@ public class QuantityMeasurementAppTest {
         assertEquals(5.08, QuantityMeasurementApp.demonstrateLengthAddition(length1, length2).getValue());
     }
     @Test
-    public void testAddition_Cummutative(){
+    public void testAddition_Commutative(){
         Length length1 = new Length(1.0, Length.LengthUnit.FEET);
         Length length2 = new Length(12.0, Length.LengthUnit.INCHES);
 
-        Length lengthCumm1 = QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
+        Length lengthComm1 = QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
 
         Length length3 = new Length(12.0, Length.LengthUnit.INCHES);
         Length length4 = new Length(1.0, Length.LengthUnit.FEET);
 
         Length lengthCumm2 = QuantityMeasurementApp.demonstrateLengthAddition(length3, length4);
 
-        assertEquals(4.0, QuantityMeasurementApp.demonstrateLengthAddition(lengthCumm1, lengthCumm2).getValue());
+        assertEquals(lengthComm1, lengthCumm2);
     }
 
     @Test
@@ -226,18 +227,18 @@ public class QuantityMeasurementAppTest {
         assertEquals(5.08, QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.CENTIMETERS).getValue());
     }
     @Test
-    public void testAddition_CummutativeOverride(){
+    public void testAddition_CommutativeOverride(){
         Length length1 = new Length(1.0, Length.LengthUnit.FEET);
         Length length2 = new Length(12.0, Length.LengthUnit.INCHES);
 
-        Length lengthCumm1 = QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.FEET);
+        Length lengthComm1 = QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.FEET);
 
         Length length3 = new Length(12.0, Length.LengthUnit.INCHES);
         Length length4 = new Length(1.0, Length.LengthUnit.FEET);
 
-        Length lengthCumm2 = QuantityMeasurementApp.demonstrateLengthAddition(length3, length4, Length.LengthUnit.INCHES);
+        Length lengthComm2 = QuantityMeasurementApp.demonstrateLengthAddition(length3, length4, Length.LengthUnit.INCHES);
 
-        assertEquals(4.0, QuantityMeasurementApp.demonstrateLengthAddition(lengthCumm1, lengthCumm2, Length.LengthUnit.FEET).getValue());
+        assertEquals(lengthComm1, lengthComm2);
     }
 
     @Test
