@@ -19,26 +19,9 @@ public class Length {
         this.unit = unit;
     }
 
-    public enum LengthUnit{
-        FEET( 12.0),
-        INCHES( 1.0),
-        YARDS(36.0),
-        CENTIMETERS(0.393701);
-
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor) {
-            this.conversionFactor = conversionFactor;
-        }
-
-        public double getConversionFactor() {
-            return conversionFactor;
-        }
-    }
-
     // Base unit is inches
     private double convertToBaseUnit(){
-        return  this.value * unit.getConversionFactor();
+       return this.unit.convertToBaseUnit(this.value);
     }
 
     public boolean compare(Length thatLength){
@@ -60,11 +43,8 @@ public class Length {
         if(targetUnit == null){
             throw new IllegalArgumentException("Target unit must not be null");
         }
-        //Length length1 = new Length(this.value, this.unit);
 
-        double baseUnit = this.convertToBaseUnit();
-        //return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
-        return convertFromBaseToTargetUnit(baseUnit, targetUnit);
+        return convertFromBaseToTargetUnit(this.convertToBaseUnit(), targetUnit);
     }
 
     public Length add(Length thatLength){
@@ -77,10 +57,9 @@ public class Length {
     }
 
     public Length add(Length length, LengthUnit targetUnit){
-        if(targetUnit == null){
+        if(length == null || targetUnit == null){
             throw new IllegalArgumentException("Target unit must not be null");
         }
-
         double baseInch  = this.convertToBaseUnit() + length.convertToBaseUnit();
         Length l1 = new Length(baseInch, LengthUnit.INCHES);
 
@@ -89,7 +68,7 @@ public class Length {
     }
 
     private Length addAndConvert(Length length, LengthUnit targetUnit){
-        if(targetUnit == null){
+        if(length ==null || targetUnit == null){
             throw new IllegalArgumentException("Target unit must not be null");
         }
 
@@ -97,8 +76,12 @@ public class Length {
         return  convertFromBaseToTargetUnit(baseUnit, targetUnit);
     }
 
-    private Length convertFromBaseToTargetUnit(double baseUnit, LengthUnit targetUnit){
-        return new Length(Math.round(baseUnit / targetUnit.getConversionFactor() * 100.0) / 100.0, targetUnit);
+    private Length convertFromBaseToTargetUnit(double lengthInInches, LengthUnit targetUnit){
+        if(Double.isNaN(lengthInInches)  || targetUnit == null){
+            throw new IllegalArgumentException("Target unit must not be null");
+        }
+         double targetValue =  targetUnit.convertFromBaseUnit(lengthInInches);
+         return  new Length(targetValue, targetUnit);
     }
 
     public static void main(String[] args){
@@ -109,6 +92,35 @@ public class Length {
         System.out.print(" is ");
         Length length2 = length1.convertTo(LengthUnit.INCHES);
         System.out.println(length2);
+
+        System.out.print(" -----------------------add ---------- ");
+        Length length3 = new Length(12.0, LengthUnit.INCHES);
+        Length length4 = length1.add(length3, LengthUnit.FEET);
+        System.out.println(length4);
+
+        System.out.print(" ------Equals ---------- ");
+        Length length5 = new Length(36.0, LengthUnit.INCHES);
+        Length length6 = new Length(1.0, LengthUnit.YARDS);
+        System.out.println(length5.equals(length6));
+
+        System.out.print(" ------------------yard-----add ---------- ");
+        Length length7 = new Length(1.0, LengthUnit.YARDS);
+        Length length8 = length7.add(new Length(3.0, LengthUnit.FEET), LengthUnit.YARDS);
+        System.out.println(length8);
+
+        System.out.println(" ------------------Convet to inch----- ---------- ");
+        Length length9 = new Length(2.54, LengthUnit.CENTIMETERS);
+        System.out.println(length9);
+        Length length10 = length9.convertTo(LengthUnit.INCHES);
+        System.out.println(length10);
+
+        System.out.println(" ------------------feet with 0-----add ---------- ");
+        Length length11 = new Length(5.0, LengthUnit.FEET);
+        Length length12 = length11.add(new Length(0.0, LengthUnit.INCHES), LengthUnit.FEET);
+        System.out.println(length12);
+
+       LengthUnit.FEET.convertToBaseUnit(12.0);
+
     }
 
     @Override
