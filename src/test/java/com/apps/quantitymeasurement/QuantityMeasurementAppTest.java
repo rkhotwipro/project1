@@ -333,9 +333,7 @@ public class QuantityMeasurementAppTest {
 
     @Test
     public void testQuantityLength_Refactored_InvalidValue() {
-        Length l1 = new Length(Double.NaN, LengthUnit.FEET);
-
         assertThrows(IllegalArgumentException.class,
-                () -> QuantityMeasurementApp.demonstrateLengthConversion(l1, LengthUnit.INCHES));
+                () -> QuantityMeasurementApp.demonstrateLengthConversion(new Length(Double.NaN, LengthUnit.FEET), LengthUnit.INCHES));
     }
 }
