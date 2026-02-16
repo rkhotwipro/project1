@@ -2,8 +2,8 @@ package com.apps.quantitymeasurement;
 
 public enum LengthUnit {
 
-    FEET(12.0),
-    INCHES(1.0),
+    FEET( 12.0),
+    INCHES( 1.0),
     YARDS(36.0),
     CENTIMETERS(0.393701);
 
@@ -18,11 +18,11 @@ public enum LengthUnit {
     }
 
     // Base unit is inches
-    public double convertToBaseUnit(double value) {
+    public double convertToBaseUnit(double value){
         return Math.round(value * this.getConversionFactor() * 100.0) / 100.0;
     }
 
-    public double convertFromBaseUnit(double baseValue) {
+    public double convertFromBaseUnit(double baseValue){
         return baseValue / this.getConversionFactor();
     }
 }
