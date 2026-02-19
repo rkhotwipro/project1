@@ -42,14 +42,14 @@ public class Quantity<U extends Imeasurable> {
         return super.hashCode();
     }
 
-    public Quantity<U> convertTo(U targetUnit) {
+    public <U extends Imeasurable> Quantity<U> convertTo(U targetUnit) {
         if (targetUnit == null) {
             throw new IllegalArgumentException("Target unit must not be null");
         }
         return convertFromBaseToTargetUnit(this.unit.convertToBaseUnit(this.value), targetUnit);
     }
 
-    private Quantity<U> convertFromBaseToTargetUnit(double value, U targetUnit) {
+    private <U extends Imeasurable> Quantity<U> convertFromBaseToTargetUnit(double value, U targetUnit) {
         if (Double.isNaN(value) || targetUnit == null) {
             throw new IllegalArgumentException("Target unit must not be null");
         }
@@ -62,7 +62,7 @@ public class Quantity<U extends Imeasurable> {
             throw new IllegalArgumentException("Target unit must not be null");
         }
         double baseValue = this.unit.convertToBaseUnit(value) + thatQty.unit.convertToBaseUnit(thatQty.value);
-        return new Quantity<U>(this.unit.convertFromBaseUnit(baseValue), this.unit);
+        return new Quantity<U>(this.unit.convertFromBaseUnit(baseValue), unit);
     }
 
     public Quantity<U> add(Quantity<U> thatQty, U targetUnit) {
